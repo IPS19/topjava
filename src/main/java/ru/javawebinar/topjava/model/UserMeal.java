@@ -41,7 +41,6 @@ public class UserMeal {
         return "UserMeal{" +
                 "dateTime=" + dateTime +
                 ", description='" + description + '\'' +
-                ", calories=" + calories +
-                "\n";
+                ", calories=" + calories;
     }
 }
