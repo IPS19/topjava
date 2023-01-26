@@ -28,10 +28,6 @@ public class UserMeal {
         return calories;
     }
 
-    public UserMealWithExcess convertToMealWithExcess() {
-        return new UserMealWithExcess(this.getDateTime(), this.getDescription(), this.getCalories(), true);
-    }
-
     public LocalDate getLocalDate() {
         return this.getDateTime().toLocalDate();
     }
