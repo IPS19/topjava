@@ -31,6 +31,7 @@
         <td> ${mealTo.dateTime}</td>
         <td> ${mealTo.description}</td>
         <td> ${mealTo.calories}</td>
+        <td><a href="meals?id=${mealTo.id}&action=delete">удалить</a></td>
         </tr>
     </c:forEach>
 </table>

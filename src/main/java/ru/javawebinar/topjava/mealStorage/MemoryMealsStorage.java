@@ -7,39 +7,81 @@ import ru.javawebinar.topjava.util.MealsUtil;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.Month;
-import java.util.Arrays;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class MemoryMealsStorage implements MealsStorage {
 
+    private static final MemoryMealsStorage INSTANCE = new MemoryMealsStorage();
+
     static List<Meal> meals;
 
-    private Map<Integer, MealTo> mealStorage = new HashMap<>();
-
-    static Integer id = 0;
+    static Integer id = 1;
 
     private final int CALORIES_PER_DAY = 2000;
 
     static {
-        meals = Arrays.asList(
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500),
-                new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410));
+        meals = Stream.of(
+                        new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
+                        new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000),
+                        new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500),
+                        new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100),
+                        new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000),
+                        new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500),
+                        new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410))
+                .peek(meal -> meal.setId(id++))
+                .collect(Collectors.toList());
+    }
+
+    private MemoryMealsStorage() {
+    }
+
+    public static MemoryMealsStorage getInstance() {
+        return INSTANCE;
     }
 
 
     @Override
-    public List<MealTo> getAllMealsTo() {
+    public List<MealTo> getAll() {
         return MealsUtil.filteredByStreams(meals,
-                        LocalTime.MIDNIGHT, LocalTime.of(23, 59, 59, 59), CALORIES_PER_DAY)
-                .stream().peek(mealTo -> mealTo.setId(++id)).collect(Collectors.toList());
+                LocalTime.MIDNIGHT, LocalTime.of(23, 59, 59, 59), CALORIES_PER_DAY);
+    }
+
+    @Override
+    public Meal getById(int id) {
+        for (Meal meal : meals) {
+            if (meal.getId().equals(id))
+                return meal;
+        }
+        return null;
+    }
+
+    @Override
+    public void add(Meal meal) {
+        meal.setId(id++);
+        meals.add(meal);
+    }
+
+    @Override
+    public void delete(int id) {
+
+        for (int i = 0; i < meals.size(); i++) {
+            Meal meal = meals.get(i);
+            if (meal.getId() == id) {
+                meals.remove(meal);
+            }
+        }
+    }
+
+    @Override
+    public void update(Meal m) {
+        for (Meal meal : meals)
+            if (meal.getId().equals(m.getId())) {
+                meals.remove(meal);
+                m.setId(id++);
+                meals.add(m);
+            }
     }
 
     public List<Meal> getMeals() {
@@ -50,7 +92,8 @@ public class MemoryMealsStorage implements MealsStorage {
         return id;
     }
 
-    public static void main(String[] args) {
-        System.out.println(new MemoryMealsStorage().getAllMealsTo());
-    }
+/*    public static void main(String[] args) {
+        System.out.println(MemoryMealsStorage.getInstance().getAll());
+    }*/
+
 }
