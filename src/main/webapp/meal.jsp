@@ -9,7 +9,7 @@
 --%>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
-<jsp:useBean id="mealTo" type="ru.javawebinar.topjava.model.MealTo" scope="request"/>
+<jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
 <head>
     <title>edit meal</title>
 </head>
@@ -20,9 +20,9 @@
 
 
 <form method="POST" action="meals">
-    DateTime: <input type="text" name="dateTime" value="<fmt:formatDate pattern="MM/dd/yyyy hh:mm" value="${mealTo.dateTime}" />"/>
-    Description: <input type="text" name="description" value="<c:out value="${mealTo.description}" />" />
-    Calories: <input type="text" name="description" value="<c:out value="${mealTo.calories}" />">
+<%--    DateTime: <input type="text" name="dateTime" value="<fmt:formatDate pattern="MM/dd/yyyy " value="${meal.dateTime}" />"/>--%>
+    Description: <input type="text" name="description" value="<c:out value="${meal.description}" />" />
+    Calories: <input type="text" name="description" value="<c:out value="${meal.calories}" />">
 </form>
 
 </body>

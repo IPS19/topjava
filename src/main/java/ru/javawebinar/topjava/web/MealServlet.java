@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.web;
 
 import ru.javawebinar.topjava.mealStorage.MemoryMealsStorage;
+import ru.javawebinar.topjava.model.Meal;
 
 import javax.servlet.RequestDispatcher;
 import javax.servlet.ServletException;
@@ -17,6 +18,7 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String forward = "";
         String action = req.getParameter("action");
 
         if (action == null) {
@@ -27,10 +29,15 @@ public class MealServlet extends HttpServlet {
         if (action.equalsIgnoreCase("delete")) {
             int id = Integer.parseInt(req.getParameter("id"));
             memoryMealsStorage.delete(id);
-        }else if (action.equalsIgnoreCase("edit")){
-
+            forward = "/meals.jsp";
+            req.setAttribute("mealsTo", memoryMealsStorage.getAll());
+        } else if (action.equalsIgnoreCase("edit")) {
+            forward = "meal.jsp";
+            int id = Integer.parseInt(req.getParameter("id"));
+            Meal meal = MemoryMealsStorage.getInstance().getById(id);
+            req.setAttribute("meal",meal);
         }
-        RequestDispatcher view = req.getRequestDispatcher("meals.jsp");
+        RequestDispatcher view = req.getRequestDispatcher(forward);
         view.forward(req, resp);
 
     }

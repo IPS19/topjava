@@ -75,9 +75,9 @@ public class MemoryMealsStorage implements MealsStorage {
         for (int i = 0; i < meals.size(); i++) {
             Meal meal = meals.get(i);
             if (meal.getId() == id) {
-                log.debug("before remove");
+                log.debug("size before"+meals.size());
                 meals.remove(meal);
-                log.debug("after remove");
+                log.debug("size after"+meals.size());
             }
         }
     }
