@@ -27,6 +27,8 @@ public class MealServlet extends HttpServlet {
         if (action.equalsIgnoreCase("delete")) {
             int id = Integer.parseInt(req.getParameter("id"));
             memoryMealsStorage.delete(id);
+        }else if (action.equalsIgnoreCase("edit")){
+
         }
         RequestDispatcher view = req.getRequestDispatcher("meals.jsp");
         view.forward(req, resp);

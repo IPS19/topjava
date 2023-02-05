@@ -1,8 +1,10 @@
 package ru.javawebinar.topjava.mealStorage;
 
+import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
+import ru.javawebinar.topjava.web.UserServlet;
 
 import java.time.LocalDateTime;
 import java.time.LocalTime;
@@ -11,7 +13,11 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class MemoryMealsStorage implements MealsStorage {
+
+    private static final Logger log = getLogger(UserServlet.class);
 
     private static final MemoryMealsStorage INSTANCE = new MemoryMealsStorage();
 
@@ -69,7 +75,9 @@ public class MemoryMealsStorage implements MealsStorage {
         for (int i = 0; i < meals.size(); i++) {
             Meal meal = meals.get(i);
             if (meal.getId() == id) {
+                log.debug("before remove");
                 meals.remove(meal);
+                log.debug("after remove");
             }
         }
     }
