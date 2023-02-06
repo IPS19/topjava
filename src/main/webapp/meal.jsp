@@ -20,7 +20,7 @@
 
 
 <form method="POST" action="meals">
-<%--    DateTime: <input type="text" name="dateTime" value="<fmt:formatDate pattern="MM/dd/yyyy " value="${meal.dateTime}" />"/>--%>
+    DateTime: <input type="text" name="dateTime" value="<fmt:formatDate pattern="dd/MM/yyyy hh:mm" value="${meal.dateTime}" />"/>
     Description: <input type="text" name="description" value="<c:out value="${meal.description}" />" />
     Calories: <input type="text" name="description" value="<c:out value="${meal.calories}" />">
 </form>

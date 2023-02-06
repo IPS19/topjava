@@ -9,6 +9,8 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.time.Month;
 
 public class MealServlet extends HttpServlet {
 
@@ -22,7 +24,7 @@ public class MealServlet extends HttpServlet {
         String action = req.getParameter("action");
 
         if (action == null) {
-            req.setAttribute("mealsTo", memoryMealsStorage.getAll());
+            req.setAttribute("mealsTo", memoryMealsStorage.getAll()); //https://metanit.com/java/javaee/3.8.php
             req.getRequestDispatcher("/meals.jsp").forward(req, resp);
             return;
         }
@@ -35,10 +37,14 @@ public class MealServlet extends HttpServlet {
             forward = "meal.jsp";
             int id = Integer.parseInt(req.getParameter("id"));
             Meal meal = MemoryMealsStorage.getInstance().getById(id);
-            req.setAttribute("meal",meal);
+            req.setAttribute("meal", meal);
+        } else if (action.equalsIgnoreCase("add")) {
+            forward = "meal.jsp";
+            Meal meal = new Meal(LocalDateTime.of(1970, Month.JANUARY, 1, 0, 0),
+                    "",0);
+            req.setAttribute("meal", meal);
         }
         RequestDispatcher view = req.getRequestDispatcher(forward);
         view.forward(req, resp);
-
     }
 }

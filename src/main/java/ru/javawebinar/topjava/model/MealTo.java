@@ -32,7 +32,7 @@ public class MealTo {
     }
 
     public String getDateTime() {
-        return dateTime.format(DateTimeFormatter.ofPattern("yyyy-mm-dd hh:mm"));
+        return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
     }
 
     public String getDescription() {
