@@ -1,8 +1,8 @@
 package ru.javawebinar.topjava.model;
 
-import javax.xml.crypto.Data;
+import ru.javawebinar.topjava.util.TimeUtil;
+
 import java.time.LocalDateTime;
-import java.time.format.DateTimeFormatter;
 
 public class MealTo {
     private final LocalDateTime dateTime;
@@ -32,7 +32,7 @@ public class MealTo {
     }
 
     public String getDateTime() {
-        return dateTime.format(DateTimeFormatter.ofPattern("yyyy-MM-dd hh:mm"));
+        return dateTime.format(TimeUtil.formatter);
     }
 
     public String getDescription() {

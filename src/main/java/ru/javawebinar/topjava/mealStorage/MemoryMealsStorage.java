@@ -65,14 +65,8 @@ public class MemoryMealsStorage implements MealsStorage {
 
     @Override
     public void add(Meal meal) {
-        log.debug("size before" + meals.size());
-
         meal.setId(id++);
-        log.debug("meal id: " + meal.getId() + " static id: " + id);
-
         meals.add(meal);
-        log.debug("size after" + meals.size());
-
     }
 
     @Override
@@ -86,13 +80,12 @@ public class MemoryMealsStorage implements MealsStorage {
     }
 
     @Override
-    public void update(Meal m) {
-        for (Meal meal : meals)
-            if (meal.getId().equals(m.getId())) {
-                meals.remove(meal);
-                m.setId(id++);
-                meals.add(m);
+    public void update(Meal meal) {
+        for (int i = 0; i < meals.size(); i++) {
+            if (meals.get(i).getId().equals(meal.getId())) {
+                meals.set(i, meal);
             }
+        }
     }
 
     public List<Meal> getMeals() {
@@ -102,9 +95,4 @@ public class MemoryMealsStorage implements MealsStorage {
     public static int getId() {
         return id;
     }
-
-/*    public static void main(String[] args) {
-        System.out.println(MemoryMealsStorage.getInstance().getAll());
-    }*/
-
 }

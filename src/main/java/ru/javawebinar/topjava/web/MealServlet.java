@@ -10,15 +10,10 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.Month;
-import java.time.format.DateTimeFormatter;
 
 public class MealServlet extends HttpServlet {
-
-    private static final String LIST_USER = "/meals";
-
     private static final MemoryMealsStorage memoryMealsStorage = MemoryMealsStorage.getInstance();
 
     @Override
@@ -53,14 +48,18 @@ public class MealServlet extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-//        Meal meal = new Meal(LocalDateTime.parse(req.getParameter("dateTime"), TimeUtil.formatter),
-        Meal meal = new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0),
-                req.getParameter("description"),
-                Integer.parseInt(req.getParameter("calories")));
-        if (req.getParameter("id") == null) {
+        req.setCharacterEncoding("UTF-8");
+        LocalDateTime dateTime = LocalDateTime.parse(req.getParameter("dateTime"), TimeUtil.formatter);
+        String description = req.getParameter("description");
+        int calories = Integer.parseInt(req.getParameter("calories"));
+        String id = req.getParameter("id");
+        Meal meal = new Meal(dateTime, description, calories);
+        if (id.equals("")) {
             MemoryMealsStorage.getInstance().add(meal);
-        } else MemoryMealsStorage.getInstance().update(meal);
-
+        } else {
+            meal.setId(Integer.parseInt(id));
+            MemoryMealsStorage.getInstance().update(meal);
+        }
         req.setAttribute("mealsTo", memoryMealsStorage.getAll());
         RequestDispatcher view = req.getRequestDispatcher("/meals.jsp");
         view.forward(req, resp);

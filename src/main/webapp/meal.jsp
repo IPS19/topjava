@@ -15,16 +15,15 @@
     <input type="hidden" name="id" value="${meal.id}">
     <table>
         <tr>
-            <td>DateTime: </td>
-            <td><input type="text" name="dateTime" value="<c:out value="${meal.dateTimeFormated}" />" /> </td>
-        </tr>
-
-        <tr>
-            <td>Description: </td>
-            <td><input type="text" name="description" value="<c:out value="${meal.description}" />" /> </td>
+            <td>DateTime:</td>
+            <td><input type="text" name="dateTime" value="<c:out value="${meal.dateTimeFormated}" />"/></td>
         </tr>
         <tr>
-            <td>Calories: </td>
+            <td>Description:</td>
+            <td><input type="text" name="description" value="<c:out value="${meal.description}" />"/></td>
+        </tr>
+        <tr>
+            <td>Calories:</td>
             <td><input type="text" name="calories" value="<c:out value="${meal.calories}" />"></td>
         </tr>
     </table>
