@@ -10,8 +10,6 @@
 <hr>
 <h2>Meals</h2>
 
-<%--<a href="https://www.meme-arsenal.com/memes/b084afa2b8c082060b58360e309c11a5.jpg">Add meal</a>--%>
-
 <a href="meals?action=add">Add meal</a>
 
 <table border="1" cellpadding="8" cellspacing="0">

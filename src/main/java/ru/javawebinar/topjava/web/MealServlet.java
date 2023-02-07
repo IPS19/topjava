@@ -22,7 +22,7 @@ public class MealServlet extends HttpServlet {
         String action = req.getParameter("action");
 
         if (action == null) {
-            req.setAttribute("mealsTo", memoryMealsStorage.getAll()); //https://metanit.com/java/javaee/3.8.php
+            req.setAttribute("mealsTo", memoryMealsStorage.getAll());
             req.getRequestDispatcher("/meals.jsp").forward(req, resp);
             return;
         }
