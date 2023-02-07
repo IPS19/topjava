@@ -19,10 +19,11 @@
         <th>Date</th>
         <th>Description</th>
         <th>Calories</th>
+        <th></th>
+        <th></th>
     </tr>
     <c:forEach items="${mealsTo}" var="mealTo">
         <jsp:useBean id="mealTo" type="ru.javawebinar.topjava.model.MealTo"/>
-        <% String s = mealTo.isExcess() ? "red" : "green";%>
         <tr style=
                     <% if (mealTo.isExcess()) {%>
                     "color: red"

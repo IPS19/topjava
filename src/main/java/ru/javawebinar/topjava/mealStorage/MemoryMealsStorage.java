@@ -65,19 +65,22 @@ public class MemoryMealsStorage implements MealsStorage {
 
     @Override
     public void add(Meal meal) {
+        log.debug("size before" + meals.size());
+
         meal.setId(id++);
+        log.debug("meal id: " + meal.getId() + " static id: " + id);
+
         meals.add(meal);
+        log.debug("size after" + meals.size());
+
     }
 
     @Override
     public void delete(int id) {
-
         for (int i = 0; i < meals.size(); i++) {
             Meal meal = meals.get(i);
             if (meal.getId() == id) {
-                log.debug("size before"+meals.size());
                 meals.remove(meal);
-                log.debug("size after"+meals.size());
             }
         }
     }

@@ -1,12 +1,6 @@
 <%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
-<%--
-  Created by IntelliJ IDEA.
-  User: Иван
-  Date: 04.02.2023
-  Time: 19:30
-  To change this template use File | Settings | File Templates.
---%>
+
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <html>
 <jsp:useBean id="meal" type="ru.javawebinar.topjava.model.Meal" scope="request"/>
@@ -17,12 +11,26 @@
 <h3><a href="index.html">Home</a></h3>
 <hr>
 <h2>Edit meal</h2>
-
-
 <form method="POST" action="meals">
-    DateTime: <input type="text" name="dateTime" value="<fmt:formatDate pattern="dd/MM/yyyy hh:mm" value="${meal.dateTime}" />"/>
-    Description: <input type="text" name="description" value="<c:out value="${meal.description}" />" />
-    Calories: <input type="text" name="description" value="<c:out value="${meal.calories}" />">
+    <input type="hidden" name="id" value="${meal.id}">
+    <table>
+        <tr>
+            <td>DateTime: </td>
+            <td><input type="text" name="dateTime" value="<c:out value="${meal.dateTimeFormated}" />" /> </td>
+        </tr>
+
+        <tr>
+            <td>Description: </td>
+            <td><input type="text" name="description" value="<c:out value="${meal.description}" />" /> </td>
+        </tr>
+        <tr>
+            <td>Calories: </td>
+            <td><input type="text" name="calories" value="<c:out value="${meal.calories}" />"></td>
+        </tr>
+    </table>
+    <button type="submit">Save</button>
+    <button onclick="window.history.back()" type="button">Cancel</button>
+
 </form>
 
 </body>

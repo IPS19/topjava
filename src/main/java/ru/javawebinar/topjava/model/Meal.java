@@ -1,8 +1,11 @@
 package ru.javawebinar.topjava.model;
 
+import ru.javawebinar.topjava.util.TimeUtil;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class Meal {
@@ -30,6 +33,10 @@ public class Meal {
 
     public LocalDateTime getDateTime() {
         return dateTime;
+    }
+
+    public String getDateTimeFormated() {
+        return dateTime.format(TimeUtil.formatter);
     }
 
     public String getDescription() {
