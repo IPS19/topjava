@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="fmt" uri="http://java.sun.com/jsp/jstl/fmt" %>
 
 <html>
 <head>
@@ -22,11 +23,8 @@
     </tr>
     <c:forEach items="${mealsTo}" var="mealTo">
         <jsp:useBean id="mealTo" type="ru.javawebinar.topjava.model.MealTo"/>
-        <tr style=
-                    <% if (mealTo.isExcess()) {%>
-                    "color: red"
-        <% } else %>
-        "color: green">
+        <tr style="${mealTo.excess ? 'color:red' : 'color:green'}">
+<%--            <td <fmt:parseDate value="${ mealTo.dateTime }" pattern="yyyy-MM-dd HH:mm" var="parsedDateTime" type="both" />></td>--%>
         <td> ${mealTo.dateTime}</td>
         <td> ${mealTo.description}</td>
         <td> ${mealTo.calories}</td>

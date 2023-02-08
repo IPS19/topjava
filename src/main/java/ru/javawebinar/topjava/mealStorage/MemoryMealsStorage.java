@@ -91,8 +91,4 @@ public class MemoryMealsStorage implements MealsStorage {
         }
         return meal;
     }
-
-    public int getId() {
-        return id;
-    }
 }

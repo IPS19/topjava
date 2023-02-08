@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web;
 
+import org.slf4j.Logger;
 import ru.javawebinar.topjava.mealStorage.MealsStorage;
 import ru.javawebinar.topjava.mealStorage.MemoryMealsStorage;
 import ru.javawebinar.topjava.model.Meal;
@@ -19,13 +20,23 @@ import java.time.LocalTime;
 import java.time.Month;
 import java.util.List;
 
+import static org.slf4j.LoggerFactory.getLogger;
+
 public class MealServlet extends HttpServlet {
+
     private final MealsStorage mealsStorage = new MemoryMealsStorage();
+
+    private static final Logger log = getLogger(MealServlet.class);
+
 
     private List<MealTo> getMealsTo(List<Meal> meals) {
         return MealsUtil.filteredByStreams(meals,
                 LocalTime.MIDNIGHT, LocalTime.of(23, 59, 59, 59), User.getCaloriesPerDay()
         );
+    }
+
+    private int parseId(HttpServletRequest req) {
+        return Integer.parseInt(req.getParameter("id"));
     }
 
     @Override
@@ -35,25 +46,36 @@ public class MealServlet extends HttpServlet {
 
         if (action == null) {
             req.setAttribute("mealsTo", getMealsTo(mealsStorage.getAll()));
-
             req.getRequestDispatcher("/meals.jsp").forward(req, resp);
             return;
         }
-        if (action.equalsIgnoreCase("delete")) {
-            int id = Integer.parseInt(req.getParameter("id"));
-            mealsStorage.delete(id);
-            forward = "/meals.jsp";
-            req.setAttribute("mealsTo", getMealsTo(mealsStorage.getAll()));
-        } else if (action.equalsIgnoreCase("edit")) {
-            forward = "/meal.jsp";
-            int id = Integer.parseInt(req.getParameter("id"));
-            Meal meal = mealsStorage.getById(id);
-            req.setAttribute("meal", meal);
-        } else if (action.equalsIgnoreCase("add")) {
-            forward = "/meal.jsp";
-            Meal meal = new Meal(LocalDateTime.of(1970, Month.JANUARY, 1, 0, 0),
-                    "", 0);
-            req.setAttribute("meal", meal);
+
+        switch (action) {
+            case "delete":
+                int id = parseId(req);
+                log.debug("delete- id: " + id);
+                mealsStorage.delete(id);
+                forward = "/meals.jsp";
+                req.setAttribute("mealsTo", getMealsTo(mealsStorage.getAll()));
+                //resp.sendRedirect("meals");
+                break;
+
+            case "edit":
+                forward = "/meal.jsp";
+                log.debug("edit element with id: " +parseId(req));
+                req.setAttribute("meal", mealsStorage.getById(parseId(req)));
+                break;
+
+            case "add":
+                forward = "/meal.jsp";
+                log.debug("add meal ");
+
+                req.setAttribute("meal", new Meal(LocalDateTime.now(), "", 0));
+                break;
+
+            default:
+                forward = "/meals.jsp";
+                req.setAttribute("mealsTo", getMealsTo(mealsStorage.getAll()));
         }
         RequestDispatcher view = req.getRequestDispatcher(forward);
         view.forward(req, resp);

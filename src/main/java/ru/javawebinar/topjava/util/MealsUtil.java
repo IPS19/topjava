@@ -4,7 +4,6 @@ import ru.javawebinar.topjava.mealStorage.MealsStorage;
 import ru.javawebinar.topjava.mealStorage.MemoryMealsStorage;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.model.MealTo;
-import ru.javawebinar.topjava.model.User;
 
 import java.time.LocalDate;
 import java.time.LocalTime;
@@ -15,11 +14,6 @@ import java.util.stream.Collectors;
 public class MealsUtil {
 
     private static final MealsStorage mealsStorage = new MemoryMealsStorage();
-
-    public static void main(String[] args) {
-        List<MealTo> mealsTo = filteredByStreams(mealsStorage.getAll(), LocalTime.of(7, 0), LocalTime.of(12, 0), User.getCaloriesPerDay());
-        //mealsTo.forEach(System.out::println);
-    }
 
     public static List<MealTo> filteredByStreams(List<Meal> meals, LocalTime startTime, LocalTime endTime, int caloriesPerDay) {
         Map<LocalDate, Integer> caloriesSumByDate = meals.stream()
