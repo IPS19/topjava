@@ -5,6 +5,8 @@ import ru.javawebinar.topjava.util.TimeUtil;
 import java.time.LocalDateTime;
 
 public class MealTo {
+
+    private int id;
     private final LocalDateTime dateTime;
 
     private final String description;
@@ -12,8 +14,6 @@ public class MealTo {
     private final int calories;
 
     private final boolean excess;
-
-    private Integer id;
 
     public MealTo(Integer id, LocalDateTime dateTime, String description, int calories, boolean excess) {
         this.id = id;
@@ -32,7 +32,7 @@ public class MealTo {
     }
 
     public String getDateTime() {
-        return dateTime.format(TimeUtil.formatter);
+        return dateTime.format(TimeUtil.formatterForParse);
     }
 
     public String getDescription() {

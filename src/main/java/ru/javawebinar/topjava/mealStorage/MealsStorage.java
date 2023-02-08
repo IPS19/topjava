@@ -6,13 +6,13 @@ import ru.javawebinar.topjava.model.MealTo;
 import java.util.List;
 
 public interface MealsStorage {
-    List<MealTo> getAll();
+    List<Meal> getAll();
 
     Meal getById(int id);
 
-    void add(Meal meal);
+    Meal add(Meal meal);
 
     void delete(int id);
 
-    void update(Meal meal);
+    Meal update(Meal meal);
 }

@@ -1,33 +1,21 @@
 package ru.javawebinar.topjava.mealStorage;
 
-import org.slf4j.Logger;
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.MealTo;
-import ru.javawebinar.topjava.util.MealsUtil;
-import ru.javawebinar.topjava.web.UserServlet;
 
 import java.time.LocalDateTime;
-import java.time.LocalTime;
 import java.time.Month;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
-import static org.slf4j.LoggerFactory.getLogger;
-
 public class MemoryMealsStorage implements MealsStorage {
 
-    private static final Logger log = getLogger(UserServlet.class);
+    private List<Meal> meals;
 
-    private static final MemoryMealsStorage INSTANCE = new MemoryMealsStorage();
+    private Integer id = 1;
 
-    static List<Meal> meals;
 
-    static Integer id = 1;
-
-    private final int CALORIES_PER_DAY = 2000;
-
-    static {
+    {
         meals = Stream.of(
                         new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500),
                         new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000),
@@ -40,18 +28,30 @@ public class MemoryMealsStorage implements MealsStorage {
                 .collect(Collectors.toList());
     }
 
-    private MemoryMealsStorage() {
-    }
+/*    public MemoryMealsStorage() {
+        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500));
+        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000));
+        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500));
+        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100));
+        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000));
+        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500));
+        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410));
+    }*/
 
-    public static MemoryMealsStorage getInstance() {
-        return INSTANCE;
-    }
+/*    {
+        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 10, 0), "Завтрак", 500));
+        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 13, 0), "Обед", 1000));
+        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 30, 20, 0), "Ужин", 500));
+        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 0, 0), "Еда на граничное значение", 100));
+        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 10, 0), "Завтрак", 1000));
+        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 13, 0), "Обед", 500));
+        this.add(new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410));
 
+    }*/
 
     @Override
-    public List<MealTo> getAll() {
-        return MealsUtil.filteredByStreams(meals,
-                LocalTime.MIDNIGHT, LocalTime.of(23, 59, 59, 59), CALORIES_PER_DAY);
+    public List<Meal> getAll() {
+        return meals;
     }
 
     @Override
@@ -64,9 +64,10 @@ public class MemoryMealsStorage implements MealsStorage {
     }
 
     @Override
-    public void add(Meal meal) {
+    public Meal add(Meal meal) {
         meal.setId(id++);
         meals.add(meal);
+        return meal;
     }
 
     @Override
@@ -75,24 +76,23 @@ public class MemoryMealsStorage implements MealsStorage {
             Meal meal = meals.get(i);
             if (meal.getId() == id) {
                 meals.remove(meal);
+                return;
             }
+
         }
     }
 
     @Override
-    public void update(Meal meal) {
+    public Meal update(Meal meal) {
         for (int i = 0; i < meals.size(); i++) {
             if (meals.get(i).getId().equals(meal.getId())) {
                 meals.set(i, meal);
             }
         }
+        return meal;
     }
 
-    public List<Meal> getMeals() {
-        return meals;
-    }
-
-    public static int getId() {
+    public int getId() {
         return id;
     }
 }

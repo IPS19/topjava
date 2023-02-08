@@ -1,7 +1,11 @@
 package ru.javawebinar.topjava.web;
 
+import ru.javawebinar.topjava.mealStorage.MealsStorage;
 import ru.javawebinar.topjava.mealStorage.MemoryMealsStorage;
 import ru.javawebinar.topjava.model.Meal;
+import ru.javawebinar.topjava.model.MealTo;
+import ru.javawebinar.topjava.model.User;
+import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.TimeUtil;
 
 import javax.servlet.RequestDispatcher;
@@ -11,10 +15,18 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDateTime;
+import java.time.LocalTime;
 import java.time.Month;
+import java.util.List;
 
 public class MealServlet extends HttpServlet {
-    private static final MemoryMealsStorage memoryMealsStorage = MemoryMealsStorage.getInstance();
+    private final MealsStorage mealsStorage = new MemoryMealsStorage();
+
+    private List<MealTo> getMealsTo(List<Meal> meals) {
+        return MealsUtil.filteredByStreams(meals,
+                LocalTime.MIDNIGHT, LocalTime.of(23, 59, 59, 59), User.getCaloriesPerDay()
+        );
+    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -22,19 +34,20 @@ public class MealServlet extends HttpServlet {
         String action = req.getParameter("action");
 
         if (action == null) {
-            req.setAttribute("mealsTo", memoryMealsStorage.getAll());
+            req.setAttribute("mealsTo", getMealsTo(mealsStorage.getAll()));
+
             req.getRequestDispatcher("/meals.jsp").forward(req, resp);
             return;
         }
         if (action.equalsIgnoreCase("delete")) {
             int id = Integer.parseInt(req.getParameter("id"));
-            memoryMealsStorage.delete(id);
+            mealsStorage.delete(id);
             forward = "/meals.jsp";
-            req.setAttribute("mealsTo", memoryMealsStorage.getAll());
+            req.setAttribute("mealsTo", getMealsTo(mealsStorage.getAll()));
         } else if (action.equalsIgnoreCase("edit")) {
             forward = "/meal.jsp";
             int id = Integer.parseInt(req.getParameter("id"));
-            Meal meal = MemoryMealsStorage.getInstance().getById(id);
+            Meal meal = mealsStorage.getById(id);
             req.setAttribute("meal", meal);
         } else if (action.equalsIgnoreCase("add")) {
             forward = "/meal.jsp";
@@ -49,18 +62,18 @@ public class MealServlet extends HttpServlet {
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
         req.setCharacterEncoding("UTF-8");
-        LocalDateTime dateTime = LocalDateTime.parse(req.getParameter("dateTime"), TimeUtil.formatter);
+        LocalDateTime dateTime = LocalDateTime.parse(req.getParameter("dateTime"), TimeUtil.formatterForParse);
         String description = req.getParameter("description");
         int calories = Integer.parseInt(req.getParameter("calories"));
         String id = req.getParameter("id");
         Meal meal = new Meal(dateTime, description, calories);
         if (id.equals("")) {
-            MemoryMealsStorage.getInstance().add(meal);
+            mealsStorage.add(meal);
         } else {
             meal.setId(Integer.parseInt(id));
-            MemoryMealsStorage.getInstance().update(meal);
+            mealsStorage.update(meal);
         }
-        req.setAttribute("mealsTo", memoryMealsStorage.getAll());
+        req.setAttribute("mealsTo", getMealsTo(mealsStorage.getAll()));
         RequestDispatcher view = req.getRequestDispatcher("/meals.jsp");
         view.forward(req, resp);
     }

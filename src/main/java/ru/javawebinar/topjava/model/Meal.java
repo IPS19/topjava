@@ -35,7 +35,7 @@ public class Meal {
     }
 
     public String getDateTimeFormated() {
-        return dateTime.format(TimeUtil.formatter);
+        return dateTime.format(TimeUtil.formatterForParse);
     }
 
     public String getDescription() {
