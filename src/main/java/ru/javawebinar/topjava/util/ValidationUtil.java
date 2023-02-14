@@ -11,7 +11,7 @@ public class ValidationUtil {
         return object;
     }
 
-    public static void checkNotFoundWithId(boolean found, int id) {//delete вернул false
+    public static void checkNotFoundWithId(boolean found, int id) {
         checkNotFound(found, "id=" + id);
     }
 
@@ -20,8 +20,8 @@ public class ValidationUtil {
         return object;
     }
 
-    public static void checkNotFound(boolean found, String msg) {//found==false
-        if (!found) {//то found =true и бросаем
+    public static void checkNotFound(boolean found, String msg) {
+        if (!found) {
             throw new NotFoundException("Not found entity with " + msg);
         }
     }
