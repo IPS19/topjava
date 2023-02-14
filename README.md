@@ -22,11 +22,13 @@ Java Enterprise Online Project
 ## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 1. [Вступление, история, команда, источники](doc/video1.md)
 
 ## Обзор наиболее востребованных технологий, которые будут изучаться на курсе TopJava
-## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 2.1. [Часть 1](doc/video2.1.md)
+## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 2.1. [Часть 1: инфраструктура](doc/video2.1.md)
 
-## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 2.2. [Часть 2](doc/video2.2.md)
+## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 2.2. [Часть 2: frameworks Spring, ORM](doc/video2.2.md)
 
-## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 2.3. [Часть 3](doc/video2.3.md)
+## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 2.3. [Часть 3: тренды](doc/video2.3.md)
+
+## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 2.3. [Часть 4: обзор разрабатываемого приложения](doc/video2.4.md)
 
 ## ![video](https://cloud.githubusercontent.com/assets/13649199/13672715/06dbc6ce-e6e7-11e5-81a9-04fbddb9e488.png) 3. [Рекомендуемые подходы к обучению на курсе](doc/video3.md)
 
@@ -131,6 +133,7 @@ Java Enterprise Online Project
 -  <a href="https://www.youtube.com/watch?v=hEyCK4ueBlc">Алексей Владыкин: Элементы функционального программирования в Java</a>
 -  <a href="https://www.youtube.com/watch?v=iD8H7cmxw_w">Yakov Fain о новом в Java 8</a>
 -  <a href="http://stackoverflow.com/questions/28319064/java-8-best-way-to-transform-a-list-map-or-foreach">stream.map vs forEach</a
+-  [Руководство по Java Stream в Java 8](https://javarush.com.ua/groups/posts/3974-kofe-breyk-177-podrobnoe-rukovodstvo-po-java-stream-v-java-8)
 -  Дополнительно
    - [Сергей Куксенко — Stream API, часть 1](https://www.youtube.com/watch?v=O8oN4KSZEXE)
    - [Сергей Куксенко — Stream API, часть 2](https://www.youtube.com/watch?v=i0Jr2l3jrDA)
@@ -140,15 +143,17 @@ Java Enterprise Online Project
     - без циклов по другим коллекциям/массивам (к ним также относим методы коллекций `addAll()/removeAll()`)
 - через Stream API за 1 проход по исходному списку `meals.stream()`
     - нельзя использовать внешние коллекции, не являющиеся частью коллектора
-    - возможны дополнительные проходы по частям списка, при этом превышение должно считаться один раз для всего подсписка. Т. е., например, нельзя разбить список на 2 подсписка с четными и нечетными датами и затем их объединить с подсчетом превышения для каждого элемента.
+  - возможно дополнительные проходы по частям списка, при этом превышение должно считаться один раз для всего подсписка. Те например нельзя разбить список на на 2 подсписка с четными и нечетными датами и затем их объединить, с подсчетом превышения для каждого элемента.
 
 Временная сложность реализации должна быть O(N) (обратите внимание на п. 13 замечаний)  
 Решение должно быть рабочим в общем случае (должно работать в приложении с многими пользователями, не только при запуске `main`)  
 Нельзя 2 раза проходить по исходному списку (в том числе по его отфильтрованной или преобразованной копии)
 
 Ресурсы:
-- [Java 8 Stream API, часть шестая: собственный коллектор](https://easyjava.ru/java/language/java-8-stream-api-chast-shestaya-sobstvennyj-kollektor)
+- [Baeldung: Custom Collectors](https://www.baeldung.com/java-8-collectors#Custom)
 - [Руководство по Java 8 Stream API: Collector](https://annimon.com/article/2778#collector)
+- [Хватит писать циклы! Топ-10 лучших методов для работы с коллекциями из Java 8](https://javarush.ru/groups/posts/524-khvatit-pisatjh-ciklih-top-10-luchshikh-metodov-dlja-rabotih-s-kollekcijami-iz-java8)
+- [Понять Java Stream API](https://vc.ru/u/604567-yerlan-akzhanov/194409-ponyat-java-stream-api)
 
 ### Замечания по использованию Stream API:
 - Когда встречаешь что-то непривычное, приходится перестраивать мозги. Например, переход с процедурного на ООП-программирование дается непросто. Те, кто не знает шаблонов (и не хотят учить), также их встречают плохо. Хорошая новость в том, что если это принять и начать использовать, то начинаешь получать от этого удовольствие. И тут главное не впасть в другую крайность:
@@ -196,7 +201,7 @@ Java Enterprise Online Project
 - <a href="http://anton.shevchuk.name/jquery/">jQuery для начинающих</a>
 
 #### Java (базовые вещи)
-- <a href="http://www.intuit.ru/studies/courses/16/16/info">Интуит. Программирование на Java</a>
+- [Сборник видео "Изучаем Java"](https://www.youtube.com/playlist?list=PLyxk-1FCKqockmP-fXZmHQ7UlYP3qvZRa)
 - <a href="https://github.com/JavaOPs/masterjava#Первое-занятие-многопоточность">1-й урок MasterJava: Многопоточность</a>
 - [Основы Java garbage collection](http://web.archive.org/web/20180831013112/https://ggenikus.github.io/blog/2014/05/04/gc)
 - <a href="https://habrahabr.ru/post/134102/">Размер Java объектов</a>
