@@ -28,6 +28,13 @@ public class MealsUtil {
             new Meal(LocalDateTime.of(2020, Month.JANUARY, 31, 20, 0), "Ужин", 410)
     );
 
+    public static final List<Meal> mealsWithUserId2 = Arrays.asList(
+            new Meal(LocalDateTime.of(2023, Month.JANUARY, 30, 10, 0), "Завтрак2", 500),
+            new Meal(LocalDateTime.of(2023, Month.JANUARY, 30, 13, 0), "Обед2", 1000),
+            new Meal(LocalDateTime.of(2023, Month.JANUARY, 30, 20, 0), "Ужин2", 500)
+
+    );
+
     public static List<MealTo> getTos(Collection<Meal> meals, int caloriesPerDay) {
         return filterByPredicate(meals, caloriesPerDay, meal -> true, meal -> true);
     }
@@ -35,7 +42,7 @@ public class MealsUtil {
     public static List<MealTo> getFilteredTos(Collection<Meal> meals, int caloriesPerDay,
                                               LocalDate startDate, LocalDate endDate, LocalTime startTime, LocalTime endTime) {
 
-        return filterByPredicate(meals, caloriesPerDay, meal -> DateTimeUtil.isBetweenDates(meal.getDate(),startDate,endDate),
+        return filterByPredicate(meals, caloriesPerDay, meal -> DateTimeUtil.isBetweenDates(meal.getDate(), startDate, endDate),
                 meal -> DateTimeUtil.isBetweenHalfOpen(meal.getTime(), startTime, endTime));
     }
 
