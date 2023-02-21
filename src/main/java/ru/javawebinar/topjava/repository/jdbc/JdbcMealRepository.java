@@ -46,23 +46,12 @@ public class JdbcMealRepository implements MealRepository {
         if (meal.isNew()) {
             Number newKey = insertMeal.executeAndReturnKey(map);
             meal.setId(newKey.intValue());
-        } else if (!isUserOwnMeal(getAll(userId), userId, meal.getId())) {
-            throw new NotFoundException("User have not meal with id" + meal.getId());
         } else if (namedParameterJdbcTemplate.update(
                 "UPDATE meals SET date_time=:dateTime, description=:description, calories=:calories" +
                         " WHERE id=:id AND user_id=:userId", map) == 0) {
             return null;
         }
         return meal;
-    }
-
-    private boolean isUserOwnMeal(List<Meal> meals, int userId, int mealCheckId) {
-        for (Meal meal : meals) {
-            if (meal.getId() == mealCheckId) {
-                return true;
-            }
-        }
-        return false;
     }
 
     @Override
@@ -72,7 +61,6 @@ public class JdbcMealRepository implements MealRepository {
 
     @Override
     public Meal get(int id, int userId) {
-//        return jdbcTemplate.query("SELECT * FROM meals WHERE id=? AND user_id=?", ROW_MAPPER, id, userId).stream().findFirst().get();
         List<Meal> meals = jdbcTemplate.query("SELECT * FROM meals WHERE id=? AND user_id=?", ROW_MAPPER, id, userId);
         return DataAccessUtils.singleResult(meals);
     }
