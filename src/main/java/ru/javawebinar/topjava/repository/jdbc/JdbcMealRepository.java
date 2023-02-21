@@ -35,7 +35,6 @@ public class JdbcMealRepository implements MealRepository {
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
     }
 
-
     @Override
     public Meal save(Meal meal, int userId) {
         MapSqlParameterSource map = new MapSqlParameterSource()
@@ -50,8 +49,8 @@ public class JdbcMealRepository implements MealRepository {
         } else if (!isUserOwnMeal(getAll(userId), userId, meal.getId())) {
             throw new NotFoundException("User have not meal with id" + meal.getId());
         } else if (namedParameterJdbcTemplate.update(
-                "UPDATE meals SET date_time=:dateTime, description=:description, calories=:calories," +
-                        "user_id=:userId WHERE id=:id", map) == 0) {
+                "UPDATE meals SET date_time=:dateTime, description=:description, calories=:calories" +
+                        " WHERE id=:id AND user_id=:userId", map) == 0) {
             return null;
         }
         return meal;

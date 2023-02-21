@@ -1,4 +1,4 @@
-DROP TABLE meals;
+DROP TABLE IF EXISTS meals;
 DROP TABLE IF EXISTS user_role;
 DROP TABLE IF EXISTS users;
 DROP SEQUENCE IF EXISTS global_seq;
@@ -33,5 +33,5 @@ CREATE TABLE meals
     calories    INTEGER NOT NULL,
     user_id     INT NOT NULL,
     FOREIGN KEY (user_id) references users (id) ON DELETE CASCADE,
-    CONSTRAINT meal_datetime_idx UNIQUE (date_time)
+    CONSTRAINT meal_datetime_idx UNIQUE (date_time, user_id)
 );
