@@ -20,14 +20,6 @@ import java.util.List;
 @Transactional
 public class JpaMealRepository implements MealRepository {
 
-
-    @Autowired
-    private SessionFactory sessionFactory;
-
-    private Session openSession() {
-        return sessionFactory.getCurrentSession();
-    }
-
     @PersistenceContext
     private EntityManager em;
 
@@ -55,11 +47,9 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        Meal meal = em.getReference(Meal.class, id);
-        if (meal.getUser().getId() == userId) {
-            Query query = em.createQuery("DELETE FROM Meal m WHERE m.id=:id");
-            return query.setParameter("id", id).executeUpdate() != 0;
-        } else return false;
+        User user = getRefUser(userId);
+        Query query = em.createQuery("DELETE FROM Meal m WHERE m.id=:id AND m.user=:user");
+            return query.setParameter("id", id).setParameter("user",user).executeUpdate() != 0;
     }
 
     @Override
