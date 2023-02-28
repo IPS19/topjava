@@ -1,8 +1,5 @@
 package ru.javawebinar.topjava.repository.jpa;
 
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.support.DataAccessUtils;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
@@ -25,20 +22,16 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public Meal save(Meal meal, int userId) {
-        User user = getRefUser(userId);
+        User user = em.getReference(User.class, userId);
+        ;
         if (meal.isNew()) {
             meal.setUser(user);
             em.persist(meal);
             return meal;
         } else {
-            if (em.createQuery("UPDATE Meal m SET m.calories=:calories, m.dateTime=:dateTime, m.description=:description WHERE m.id=:id AND m.user=:user")
-                    .setParameter("calories", meal.getCalories())
-                    .setParameter("dateTime", meal.getDateTime())
-                    .setParameter("description", meal.getDescription())
-                    .setParameter("id", meal.getId())
-                    .setParameter("user", user)
-                    .executeUpdate() != 0) {
+            if (get(meal.id(), userId) != null) {
                 meal.setUser(user);
+                em.merge(meal);
                 return meal;
             }
         }
@@ -47,32 +40,26 @@ public class JpaMealRepository implements MealRepository {
 
     @Override
     public boolean delete(int id, int userId) {
-        User user = getRefUser(userId);
-        Query query = em.createQuery("DELETE FROM Meal m WHERE m.id=:id AND m.user=:user");
-            return query.setParameter("id", id).setParameter("user",user).executeUpdate() != 0;
+        Query query = em.createNamedQuery(Meal.DELETE);
+        return query.setParameter("id", id).setParameter("userId", userId).executeUpdate() != 0;
     }
 
     @Override
     public Meal get(int id, int userId) {
-        User user = getRefUser(userId);
-        List<Meal> meals = em.createQuery("SELECT m FROM Meal m WHERE m.id=:id AND m.user=:user")
-                .setParameter("id", id).setParameter("user", user).getResultList();
+        List<Meal> meals = em.createNamedQuery(Meal.GET_USERS_MEAL, Meal.class)
+                .setParameter("id", id).setParameter("userId", userId).getResultList();
         return DataAccessUtils.singleResult(meals);
-    }
-
-    private User getRefUser(int id) {
-        return em.getReference(User.class, id);
     }
 
     @Override
     public List<Meal> getAll(int userId) {
-        Query query = em.createQuery("SELECT m FROM Meal m WHERE m.user.id=:userId ORDER BY m.dateTime DESC");
-        return query.setParameter("userId", userId).getResultList();
+        return em.createNamedQuery(Meal.ALL_SORTED, Meal.class)
+                .setParameter("userId", userId).getResultList();
     }
 
     @Override
     public List<Meal> getBetweenHalfOpen(LocalDateTime startDateTime, LocalDateTime endDateTime, int userId) {
-        return em.createQuery("SELECT m FROM Meal m WHERE m.user.id=?1 AND m.dateTime>=?2 AND m.dateTime<?3 ORDER BY m.dateTime DESC")
+        return em.createNamedQuery(Meal.ALL_SORTED_BETWEEN_HALF_OPEN, Meal.class)
                 .setParameter(1, userId).setParameter(2, startDateTime).setParameter(3, endDateTime)
                 .getResultList();
     }
