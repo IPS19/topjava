@@ -21,45 +21,48 @@ import java.util.List;
 
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalDate;
 import static ru.javawebinar.topjava.util.DateTimeUtil.parseLocalTime;
-import static ru.javawebinar.topjava.util.ValidationUtil.assureIdConsistent;
 
 @Controller
 @RequestMapping("/meals")
 public class JspMealController extends AbstractMealController {
 
-    @PostMapping("")
-    public String create(HttpServletRequest request) {
+    @PostMapping
+    public String createOrUpdate(HttpServletRequest request) {
+        int userId = getId(request);
+
         Meal meal = new Meal(
                 LocalDateTime.parse(request.getParameter("dateTime")),
                 request.getParameter("description"),
                 Integer.parseInt(request.getParameter("calories")));
         if (StringUtils.hasLength(request.getParameter("id"))) {
             meal.setId(Integer.parseInt(request.getParameter("id")));
+            log.info("update {} for user {}", meal, userId);
             service.update(meal, userId);
         } else {
-            service.create(meal, userId);
+            create(meal);
         }
         return "redirect:/meals";
     }
 
     @GetMapping("/update/{id}")
-    public String update(@PathVariable("id") int id, Model model) {
-        Meal meal = service.get(id, userId);
-        assureIdConsistent(meal, id);
+    public String update(@PathVariable("id") int id, Model model, HttpServletRequest request) {
+        log.info("update meal:");
+        Meal meal = service.get(id, getId(request));
         model.addAttribute("meal", meal);
         return "mealForm";
     }
 
     @GetMapping("/create")
     public String createNew(Model model) {
+        log.info("create new meal:");
         model.addAttribute("meal",
                 new Meal(LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES), "", 1000));
         return "mealForm";
     }
 
     @GetMapping("/delete/{id}")
-    public String delete(@PathVariable("id") int id) {
-        service.delete(id, userId);
+    public String delete(@PathVariable("id") int id, HttpServletRequest request) {
+        super.delete(id);
         return "redirect:/meals";
     }
 
@@ -69,18 +72,14 @@ public class JspMealController extends AbstractMealController {
         LocalDate endDate = parseLocalDate(request.getParameter("endDate"));
         LocalTime startTime = parseLocalTime(request.getParameter("startTime"));
         LocalTime endTime = parseLocalTime(request.getParameter("endTime"));
-        log.info("getBetween dates({} - {}) time({} - {}) for user {}", startDate, endDate, startTime, endTime, userId);
-        List<Meal> mealsDateFiltered = service.getBetweenInclusive(startDate, endDate, userId);
-        model.addAttribute("meals",
-                MealsUtil.getFilteredTos(mealsDateFiltered, SecurityUtil.authUserCaloriesPerDay(), startTime, endTime));
+
+        model.addAttribute("meals",getBetween(startDate,startTime,endDate,endTime));
         return "meals";
     }
 
-    @GetMapping()
+    @GetMapping
     public String getAll(Model model) {
-        log.info("getAll for user {}", userId);
-        model.addAttribute("meals",
-                MealsUtil.getTos(super.service.getAll(userId), SecurityUtil.authUserCaloriesPerDay()));
+        model.addAttribute("meals", getAll());
         return "meals";
     }
 }

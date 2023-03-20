@@ -17,6 +17,7 @@ import java.time.LocalDateTime;
 import java.util.List;
 
 @Repository
+@Transactional(readOnly = true)
 public class JdbcMealRepository implements MealRepository {
 
     private static final RowMapper<Meal> ROW_MAPPER = BeanPropertyRowMapper.newInstance(Meal.class);
@@ -27,8 +28,6 @@ public class JdbcMealRepository implements MealRepository {
 
     private final SimpleJdbcInsert insertMeal;
 
-    private final PlatformTransactionManager transactionManager;
-
     public JdbcMealRepository(JdbcTemplate jdbcTemplate, NamedParameterJdbcTemplate namedParameterJdbcTemplate, PlatformTransactionManager transactionManager) {
         this.insertMeal = new SimpleJdbcInsert(jdbcTemplate)
                 .withTableName("meal")
@@ -36,11 +35,10 @@ public class JdbcMealRepository implements MealRepository {
 
         this.jdbcTemplate = jdbcTemplate;
         this.namedParameterJdbcTemplate = namedParameterJdbcTemplate;
-        this.transactionManager = transactionManager;
     }
 
     @Override
-    @Transactional(transactionManager = "transactionManager")
+    @Transactional()
     public Meal save(Meal meal, int userId) {
         MapSqlParameterSource map = new MapSqlParameterSource()
                 .addValue("id", meal.getId())
@@ -63,13 +61,12 @@ public class JdbcMealRepository implements MealRepository {
     }
 
     @Override
-    @Transactional(transactionManager = "transactionManager")
+    @Transactional()
     public boolean delete(int id, int userId) {
         return jdbcTemplate.update("DELETE FROM meal WHERE id=? AND user_id=?", id, userId) != 0;
     }
 
     @Override
-    @Transactional(transactionManager = "transactionManager", readOnly = true)
     public Meal get(int id, int userId) {
         List<Meal> meals = jdbcTemplate.query(
                 "SELECT * FROM meal WHERE id = ? AND user_id = ?", ROW_MAPPER, id, userId);
