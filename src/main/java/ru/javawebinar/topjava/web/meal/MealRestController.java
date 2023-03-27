@@ -55,6 +55,7 @@ public class MealRestController extends AbstractMealController {
     }
 
     @Override
+    @GetMapping(name = "/filter", params = {"startDate", "startTime", "endDate", "endTime"})
     public List<MealTo> getBetween(LocalDate startDate, LocalTime startTime, LocalDate endDate, LocalTime endTime) {
         return super.getBetween(startDate, startTime, endDate, endTime);
     }
