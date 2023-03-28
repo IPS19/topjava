@@ -22,8 +22,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 import static ru.javawebinar.topjava.MealTestData.*;
-import static ru.javawebinar.topjava.UserTestData.ADMIN_ID;
-import static ru.javawebinar.topjava.UserTestData.USER_ID;
 
 class MealRestControllerTest extends AbstractControllerTest {
 
@@ -84,13 +82,28 @@ class MealRestControllerTest extends AbstractControllerTest {
     }
 
     @Test
-    void getBetween() throws Exception{
-        List<MealTo> meals = MealsUtil.getTos(List.of(meal5), SecurityUtil.authUserCaloriesPerDay());
+    void getBetween() throws Exception {
+        List<MealTo> meals = MealsUtil.getTos(List.of(meal7, meal6, meal5, meal4, meal3, meal2, meal1),
+                SecurityUtil.authUserCaloriesPerDay());
+        List<MealTo> checkMealTo = List.of(meals.get(2));
         perform(MockMvcRequestBuilders.get(REST_URL +
-                "filter?startDateTime='2020-12-31T10:00:00'&endDateTime='2020-12-31T13:00:00'"))
+                "filter?startDateTime=2020-01-31T10:00:00&endDateTime=2020-01-31T12:00:00"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEAL_MATCHER_TO.contentJson(meals));
+                .andExpect(MEAL_MATCHER_TO.contentJson(checkMealTo));
     }
+
+/*    @Test
+    void getBetween() throws Exception{
+        List<MealTo> meals = MealsUtil.getTos(List.of(meal7, meal6, meal5, meal4, meal3, meal2, meal1),
+                SecurityUtil.authUserCaloriesPerDay());
+        List<MealTo> checkMealTo = List.of(meals.get(2));
+        perform(MockMvcRequestBuilders.get(REST_URL +
+                "filter?startDate=2020-01-31&startTime=10:00&endDate=2020-01-31&endTime=12:00"))
+                .andExpect(status().isOk())
+                .andDo(print())
+                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
+                .andExpect(MEAL_MATCHER_TO.contentJson(checkMealTo));
+    }*/
 }
