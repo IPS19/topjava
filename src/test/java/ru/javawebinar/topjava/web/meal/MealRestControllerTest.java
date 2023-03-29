@@ -6,13 +6,13 @@ import org.springframework.http.MediaType;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import ru.javawebinar.topjava.MealTestData;
+import ru.javawebinar.topjava.UserTestData;
 import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.service.MealService;
 import ru.javawebinar.topjava.to.MealTo;
 import ru.javawebinar.topjava.util.MealsUtil;
 import ru.javawebinar.topjava.util.exception.NotFoundException;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
-import ru.javawebinar.topjava.web.SecurityUtil;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
 import java.util.List;
@@ -44,12 +44,13 @@ class MealRestControllerTest extends AbstractControllerTest {
         perform(MockMvcRequestBuilders.delete(REST_URL + MEAL1_ID))
                 .andDo(print())
                 .andExpect(status().isNoContent());
-        assertThrows(NotFoundException.class, () -> mealService.get(MEAL1_ID, SecurityUtil.authUserId()));
+        assertThrows(NotFoundException.class, () -> mealService.get(MEAL1_ID, UserTestData.user.id()));
     }
 
     @Test
     void getAll() throws Exception {
-        List<MealTo> meals = MealsUtil.getTos(List.of(meal7, meal6, meal5, meal4, meal3, meal2, meal1), SecurityUtil.authUserCaloriesPerDay());
+        List<MealTo> meals = MealsUtil.getTos(List.of(meal7, meal6, meal5, meal4, meal3, meal2, meal1),
+                MealsUtil.DEFAULT_CALORIES_PER_DAY);
         perform(MockMvcRequestBuilders.get(REST_URL))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -68,7 +69,7 @@ class MealRestControllerTest extends AbstractControllerTest {
         int newId = created.id();
         newMeal.setId(newId);
         MEAL_MATCHER.assertMatch(created, newMeal);
-        MEAL_MATCHER.assertMatch(mealService.get(newId, SecurityUtil.authUserId()), newMeal);
+        MEAL_MATCHER.assertMatch(mealService.get(newId, UserTestData.user.id()), newMeal);
     }
 
     @Test
@@ -78,32 +79,22 @@ class MealRestControllerTest extends AbstractControllerTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(updated)))
                 .andExpect(status().isNoContent());
-        MEAL_MATCHER.assertMatch(mealService.get(MEAL1_ID, SecurityUtil.authUserId()), updated);
+        MEAL_MATCHER.assertMatch(mealService.get(MEAL1_ID, UserTestData.user.id()), updated);
     }
 
     @Test
     void getBetween() throws Exception {
         List<MealTo> meals = MealsUtil.getTos(List.of(meal7, meal6, meal5, meal4, meal3, meal2, meal1),
-                SecurityUtil.authUserCaloriesPerDay());
+                MealsUtil.DEFAULT_CALORIES_PER_DAY);
         List<MealTo> checkMealTo = List.of(meals.get(2));
-        perform(MockMvcRequestBuilders.get(REST_URL +
-                "filter?startDateTime=2020-01-31T10:00:00&endDateTime=2020-01-31T12:00:00"))
+        perform(MockMvcRequestBuilders.get(REST_URL + "/filter")
+                .param("startDate", "2020-01-31")
+                .param("startTime", "10:00")
+                .param("endDate", "2020-01-31")
+                .param("endTime", "12:00"))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
                 .andExpect(MEAL_MATCHER_TO.contentJson(checkMealTo));
     }
-
-/*    @Test
-    void getBetween() throws Exception{
-        List<MealTo> meals = MealsUtil.getTos(List.of(meal7, meal6, meal5, meal4, meal3, meal2, meal1),
-                SecurityUtil.authUserCaloriesPerDay());
-        List<MealTo> checkMealTo = List.of(meals.get(2));
-        perform(MockMvcRequestBuilders.get(REST_URL +
-                "filter?startDate=2020-01-31&startTime=10:00&endDate=2020-01-31&endTime=12:00"))
-                .andExpect(status().isOk())
-                .andDo(print())
-                .andExpect(content().contentTypeCompatibleWith(MediaType.APPLICATION_JSON))
-                .andExpect(MEAL_MATCHER_TO.contentJson(checkMealTo));
-    }*/
 }

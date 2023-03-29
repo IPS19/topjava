@@ -36,7 +36,7 @@ public class CustomDateTimeFormatAnnotationFormatterFactory implements Annotatio
             case TIME -> {
                 return new CustomTimeFormatter();
             }
+            default -> throw new IllegalArgumentException("Date or Time have illegal format");
         }
-        return null;
     }
 }

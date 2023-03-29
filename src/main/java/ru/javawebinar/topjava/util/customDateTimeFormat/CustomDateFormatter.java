@@ -7,9 +7,12 @@ import java.time.format.DateTimeFormatter;
 import java.util.Locale;
 
 public class CustomDateFormatter implements Formatter<LocalDate> {
+
+    private static final String DATE_PATTERN = "yyyy-MM-dd";
+
     @Override
     public LocalDate parse(String text, Locale locale) {
-        return LocalDate.parse(text, DateTimeFormatter.ofPattern("yyyy-MM-dd"));
+        return LocalDate.parse(text, DateTimeFormatter.ofPattern(DATE_PATTERN));
     }
 
     @Override
