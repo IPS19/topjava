@@ -7,6 +7,7 @@ import ru.javawebinar.topjava.model.Meal;
 import ru.javawebinar.topjava.to.MealTo;
 
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 
 @RestController
@@ -21,10 +22,11 @@ public class MealUIController extends AbstractMealController {
 
     @PostMapping
     @ResponseStatus(HttpStatus.NO_CONTENT)
-    public void create(@RequestParam LocalDateTime dateTime,
+    public void create(@RequestParam String dateTime,
                        @RequestParam String description,
                        @RequestParam int calories) {
-        super.create(new Meal(null, dateTime, description, calories));
+        LocalDateTime dateTimeParse = LocalDateTime.parse(dateTime,DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        super.create(new Meal(null, dateTimeParse, description, calories));
     }
 
     @Override
