@@ -10,8 +10,7 @@
 <jsp:include page="fragments/bodyHeader.jsp"/>
 
 <section>
-
-    <form method="get" action="meals/filter">
+    <form method="get" action="ui/meals/filter" id="filter">
         <dl>
             <dt><spring:message code="meal.startDate"/>:</dt>
             <dd><input type="date" name="startDate" value="${param.startDate}"></dd>
@@ -28,19 +27,16 @@
             <dt><spring:message code="meal.endTime"/>:</dt>
             <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
         </dl>
-        <button type="submit"><spring:message code="meal.filter"/></button>
     </form>
+    <button onclick="filterTable()"><spring:message code="meal.filter"/></button>
+
     <hr>
-    <a href="meals/create"><spring:message code="meal.add"/></a>
-    <br>
-    <%--    кнопочка    --%>
+    <%----%>
     <button class="btn btn-primary" onclick="add()">
         <span class="fa fa-plus"></span>
         <spring:message code="meal.add"/>
     </button>
-
-
-    <%--    модалька    --%>
+    <%----%>
     <div class="modal fade" tabindex="-1" id="editRow">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -59,7 +55,8 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="description" class="col-form-label"><spring:message code="meal.description"/></label>
+                            <label for="description" class="col-form-label"><spring:message
+                                    code="meal.description"/></label>
                             <input type="text" class="form-control" id="description" name="description"
                                    placeholder="<spring:message code="meal.description"/>">
                         </div>
@@ -86,9 +83,7 @@
             </div>
         </div>
     </div>
-
-    <%--    табличка    --%>
-
+    <%----%>
     <hr>
     <div class="jumbotron pt-4">
         <div class="container">
@@ -116,12 +111,9 @@
                         </td>
                         <td>${meal.description}</td>
                         <td>${meal.calories}</td>
-
                         <td><a><span class="fa fa-pencil"></span></a></td>
                         <td><a class="delete"><span class="fa fa-remove"></span></a></td>
 
-                            <%--                        <td><a href="meals/update?id=${meal.id}"><spring:message code="common.update"/></a></td>
-                                                    <td><a href="meals/delete?id=${meal.id}"><spring:message code="common.delete"/></a></td>--%>
                     </tr>
                 </c:forEach>
             </table>

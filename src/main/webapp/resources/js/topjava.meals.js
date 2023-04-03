@@ -5,6 +5,12 @@ const ctx = {
     ajaxUrl: mealAjaxUrl
 };
 
+function filterTable() {
+    $.get(ctx.ajaxUrl + "filter/", function (data) {
+        ctx.datatableApi.clear().rows.add(data).draw();
+    });
+}
+
 // $(document).ready(function () {
 $(function () {
     makeEditable(
