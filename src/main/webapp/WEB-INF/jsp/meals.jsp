@@ -30,7 +30,7 @@
     </form>
     <button class="btn btn-info" onclick="filterForm()"><spring:message code="meal.filter"/></button>
     &nbsp;&nbsp;&nbsp;&nbsp;
-    <button class="btn btn-info" onclick="resetFilter()">сбросить фильтр</button>
+    <button class="btn btn-info" onclick="resetFilter()"><spring:message code="meal.resetFilter"/></button>
     <hr>
     <button class="btn btn-primary" onclick="add()">
         <span class="fa fa-plus"></span>

@@ -23,8 +23,6 @@ function filterForm() {
 }
 
 function resetFilter() {
-/*    form = $('#filter');
-    form.reset();*/
     $("#filter")[0].reset();
     updateTable();
 }
