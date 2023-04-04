@@ -11,6 +11,7 @@ import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.time.format.DateTimeFormatter;
+import java.time.temporal.ChronoUnit;
 import java.util.List;
 
 @RestController
@@ -28,7 +29,9 @@ public class MealUIController extends AbstractMealController {
     public void create(@RequestParam String dateTime,
                        @RequestParam String description,
                        @RequestParam int calories) {
-        LocalDateTime dateTimeParse = LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
+        LocalDateTime dateTimeParse =
+                dateTime.equals("") ? LocalDateTime.now().truncatedTo(ChronoUnit.MINUTES) :
+                        LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_LOCAL_DATE_TIME);
         super.create(new Meal(null, dateTimeParse, description, calories));
     }
 

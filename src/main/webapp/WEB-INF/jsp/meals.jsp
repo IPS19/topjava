@@ -28,15 +28,14 @@
             <dd><input type="time" name="endTime" value="${param.endTime}"></dd>
         </dl>
     </form>
-    <button onclick="filterTable()"><spring:message code="meal.filter"/></button>
-
+    <button class="btn btn-info" onclick="filterForm()"><spring:message code="meal.filter"/></button>
+    &nbsp;&nbsp;&nbsp;&nbsp;
+    <button class="btn btn-info" onclick="resetFilter()">сбросить фильтр</button>
     <hr>
-    <%----%>
     <button class="btn btn-primary" onclick="add()">
         <span class="fa fa-plus"></span>
         <spring:message code="meal.add"/>
     </button>
-    <%----%>
     <div class="modal fade" tabindex="-1" id="editRow">
         <div class="modal-dialog">
             <div class="modal-content">
@@ -83,14 +82,12 @@
             </div>
         </div>
     </div>
-    <%----%>
     <hr>
+
     <div class="jumbotron pt-4">
         <div class="container">
             <h3 class="text-center"><spring:message code="meal.title"/></h3>
-
             <table class="table table-striped" id="datatable">
-
                 <thead>
                 <tr>
                     <th><spring:message code="meal.dateTime"/></th>
@@ -113,7 +110,6 @@
                         <td>${meal.calories}</td>
                         <td><a><span class="fa fa-pencil"></span></a></td>
                         <td><a class="delete"><span class="fa fa-remove"></span></a></td>
-
                     </tr>
                 </c:forEach>
             </table>
