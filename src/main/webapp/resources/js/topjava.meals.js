@@ -1,21 +1,14 @@
 const mealAjaxUrl = "ui/meals/";
 
-const mealAjaxUrlFilter = "ui/meals/filter/"
-
 const ctx = {
     ajaxUrl: mealAjaxUrl
 };
 
-const ctxf = {
-    ajaxUrlFilter: mealAjaxUrlFilter
-};
-
 function filterForm() {
-    form = $('#filter');
     $.ajax({
         type: "GET",
-        url: ctxf.ajaxUrlFilter,
-        data: form.serialize()
+        url: "ui/meals/filter/",
+        data: $('#filter').serialize()
     }).done(function (data) {
         ctx.datatableApi.clear().rows.add(data).draw();
         successNoty("filtered");
@@ -55,7 +48,7 @@ $(function () {
             "order": [
                 [
                     0,
-                    "asc"
+                    "desc"
                 ]
             ]
         })
