@@ -20,25 +20,42 @@ function clearFilter() {
 $(function () {
     makeEditable(
         $("#datatable").DataTable({
+            "ajax": {
+                "url": mealAjaxUrl,
+                "dataSrc": ""
+            },
             "paging": false,
             "info": true,
             "columns": [
                 {
-                    "data": "dateTime"
+                    "data": "dateTime",
+                    "render": function (date, type, row) {
+                        if (type === "display") {
+                            return date.substring(0, 10);
+                        }
+                        return date;
+                    }
                 },
                 {
                     "data": "description"
+
+                },
+                {
+                    "data": "excess"
+
                 },
                 {
                     "data": "calories"
                 },
                 {
+                    "orderable": false,
                     "defaultContent": "Edit",
-                    "orderable": false
+                    "render": renderEditBtn
                 },
                 {
+                    "orderable": false,
                     "defaultContent": "Delete",
-                    "orderable": false
+                    "render": renderDeleteBtn
                 }
             ],
             "order": [

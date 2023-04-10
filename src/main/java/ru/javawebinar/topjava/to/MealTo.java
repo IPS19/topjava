@@ -1,6 +1,7 @@
 package ru.javawebinar.topjava.to;
 
 import org.hibernate.validator.constraints.Range;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
@@ -9,6 +10,7 @@ import java.beans.ConstructorProperties;
 import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.Objects;
 
 public class MealTo extends BaseTo implements Serializable {
@@ -23,7 +25,7 @@ public class MealTo extends BaseTo implements Serializable {
     @Size(min = 2, max = 120, message = "description must be between 2 and 120 characters")
     private String description;
 
-    @Range(min = 10, max = 5000,message = "calories must be between 10 and 5000")
+    @Range(min = 10, max = 5000, message = "calories must be between 10 and 5000")
     private int calories;
 
     private boolean excess;
@@ -40,8 +42,12 @@ public class MealTo extends BaseTo implements Serializable {
     public MealTo() {
     }
 
-    public void setDateTime(LocalDateTime dateTime) {
+/*    public void setDateTime(@DateTimeFormat(iso = DateTimeFormat.ISO.DATE_TIME)LocalDateTime dateTime) {
         this.dateTime = dateTime;
+    }*/
+
+    public void setDateTime(String dateTime) {
+        this.dateTime = LocalDateTime.parse(dateTime, DateTimeFormatter.ISO_DATE_TIME);
     }
 
     public void setDescription(String description) {
