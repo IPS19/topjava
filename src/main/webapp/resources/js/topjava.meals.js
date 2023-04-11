@@ -30,19 +30,15 @@ $(function () {
                 {
                     "data": "dateTime",
                     "render": function (date, type, row) {
+                        let id = row.id;
                         if (type === "display") {
-                            return date.substring(0, 10);
+                            return date.substring(0, 10) + " " + date.substring(11, 16);
                         }
                         return date;
                     }
                 },
                 {
-                    "data": "description"
-
-                },
-                {
-                    "data": "excess"
-
+                    "data": "description",
                 },
                 {
                     "data": "calories"
@@ -63,7 +59,12 @@ $(function () {
                     0,
                     "desc"
                 ]
-            ]
+            ],
+            "createdRow": function (row, data, dataIndex) {
+                if (data["excess"]) {
+                    $(row).attr("data-meal-excess", true);
+                } else $(row).attr("data-meal-excess", false);
+            }
         })
     );
 });
