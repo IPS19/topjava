@@ -1,13 +1,9 @@
 package ru.javawebinar.topjava.util;
 
 import ru.javawebinar.topjava.model.Meal;
-import ru.javawebinar.topjava.model.Role;
-import ru.javawebinar.topjava.model.User;
 import ru.javawebinar.topjava.to.MealTo;
-import ru.javawebinar.topjava.to.UserTo;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.time.LocalTime;
 import java.util.Collection;
 import java.util.List;
@@ -20,12 +16,12 @@ public class MealsUtil {
     private MealsUtil() {
     }
 
-/*    public Meal(Integer id, LocalDateTime dateTime, String description, int calories) {
-        super(id);
-        this.dateTime = dateTime;
-        this.description = description;
-        this.calories = calories;
-    }*/
+    public static Meal updateFromTo(MealTo mealTo, Meal meal) {
+        meal.setDateTime(mealTo.getDateTime());
+        meal.setCalories(mealTo.getCalories());
+        meal.setDescription(mealTo.getDescription());
+        return meal;
+    }
 
     public static Meal createNewFromTo(MealTo mealTo) {
         return new Meal(null, mealTo.getDateTime(), mealTo.getDescription(), mealTo.getCalories());

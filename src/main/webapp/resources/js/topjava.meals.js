@@ -30,7 +30,6 @@ $(function () {
                 {
                     "data": "dateTime",
                     "render": function (date, type, row) {
-                        let id = row.id;
                         if (type === "display") {
                             return date.substring(0, 10) + " " + date.substring(11, 16);
                         }
