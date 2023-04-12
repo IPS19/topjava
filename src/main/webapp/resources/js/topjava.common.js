@@ -36,7 +36,7 @@ function deleteRow(id) {
             type: "DELETE"
         }).done(function () {
             ctx.updateTable();
-            successNoty("common.deleted");
+            successNoty(i18n["common.deleted"]);
         });
     }
 }
@@ -53,7 +53,7 @@ function save() {
     }).done(function () {
         $("#editRow").modal("hide");
         ctx.updateTable();
-        successNoty("common.saved");
+        successNoty(i18n["common.saved"]);
     });
 }
 

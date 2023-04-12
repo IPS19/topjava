@@ -44,13 +44,12 @@ public class Meal extends AbstractBaseEntity {
     @Column(name = "calories", nullable = false)
     @Range(min = 10, max = 5000, message = "calories must be between 10 and 5000")
     @NotNull(message = "calories must not be empty")
-    private int calories;
+    private Integer calories;
 
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false)
     @OnDelete(action = OnDeleteAction.CASCADE)
     @JsonBackReference
-//    @NotNull
     private User user;
 
     public Meal() {
@@ -91,7 +90,7 @@ public class Meal extends AbstractBaseEntity {
         this.description = description;
     }
 
-    public void setCalories(int calories) {
+    public void setCalories(Integer calories) {
         this.calories = calories;
     }
 

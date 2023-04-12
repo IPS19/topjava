@@ -10,7 +10,6 @@ import ru.javawebinar.topjava.to.UserTo;
 
 import javax.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 
 import static ru.javawebinar.topjava.util.Util.getErrorMsg;
 
