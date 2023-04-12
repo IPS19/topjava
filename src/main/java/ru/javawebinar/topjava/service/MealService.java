@@ -42,13 +42,7 @@ public class MealService {
 
     public void update(Meal meal, int userId) {
         Assert.notNull(meal, "meal must not be null");
-        repository.save(meal, userId);
-    }
-
-    public void update(MealTo mealTo, int userId) {
-        Meal meal = get(mealTo.id(), userId);
-        Meal updatedMeal = MealsUtil.updateFromTo(mealTo, meal);
-        repository.save(updatedMeal, userId);
+        checkNotFoundWithId(repository.save(meal, userId), meal.id());
     }
 
     public Meal create(Meal meal, int userId) {

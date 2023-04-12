@@ -37,7 +37,7 @@ $(function () {
                     }
                 },
                 {
-                    "data": "description",
+                    "data": "description"
                 },
                 {
                     "data": "calories"
@@ -60,9 +60,7 @@ $(function () {
                 ]
             ],
             "createdRow": function (row, data, dataIndex) {
-                if (data["excess"]) {
-                    $(row).attr("data-meal-excess", true);
-                } else $(row).attr("data-meal-excess", false);
+                    $(row).attr("data-meal-excess", data["excess"]);
             }
         })
     );
