@@ -12,6 +12,7 @@ import ru.javawebinar.topjava.util.UsersUtil;
 import ru.javawebinar.topjava.web.AbstractControllerTest;
 import ru.javawebinar.topjava.web.json.JsonUtil;
 
+import static org.hamcrest.Matchers.containsString;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
@@ -63,6 +64,23 @@ class ProfileRestControllerTest extends AbstractControllerTest {
         USER_MATCHER.assertMatch(created, newUser);
         USER_MATCHER.assertMatch(userService.get(newId), newUser);
     }
+
+    @Test
+    void registerNotValid() throws Exception {
+        UserTo emptyName = new UserTo(null, "", "newemail@ya.ru", "newPassword", 1500);
+//        ErrorInfo errorInfo = new ErrorInfo()
+//        String jsonError = "{\"url\":\"http://localhost:8080/topjava/rest/admin/users\",\"type\":\"VALIDATION_ERROR\",\"detail\":\"[name] не должно быть пустым<br>[name] размер должен находиться в диапазоне от 2 до 128\"}";
+        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(JsonUtil.writeValue(emptyName)))
+                .andDo(print())
+                .andExpect(status().isUnprocessableEntity())
+                .andExpect(content().string(containsString("VALIDATION_ERROR")));
+//                .andExpect(content().string(jsonError));
+//                .andExpect(MockMvcResultMatchers)
+
+    }
+
 
     @Test
     void update() throws Exception {

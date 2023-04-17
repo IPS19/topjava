@@ -44,8 +44,11 @@ public class ExceptionInfoHandler {
     }
 
     @ResponseStatus(HttpStatus.UNPROCESSABLE_ENTITY)  // 422
-    @ExceptionHandler({BindException.class,IllegalRequestDataException.class, MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})
-    public ErrorInfo validationError(HttpServletRequest req, Exception e) {
+    @ExceptionHandler({BindException.class, IllegalRequestDataException.class, MethodArgumentTypeMismatchException.class, HttpMessageNotReadableException.class})
+    public ErrorInfo validationError(HttpServletRequest req, Exception e, BindingResult result) {
+        if (result.hasErrors()) {
+            e = new Exception(ValidationUtil.getErrorResponse(result).toString());
+        }
         return logAndGetErrorInfo(req, e, false, VALIDATION_ERROR);
     }
 
