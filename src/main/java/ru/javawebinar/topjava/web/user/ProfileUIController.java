@@ -1,5 +1,6 @@
 package ru.javawebinar.topjava.web.user;
 
+import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
@@ -45,10 +46,14 @@ public class ProfileUIController extends AbstractUserController {
         if (result.hasErrors()) {
             model.addAttribute("register", true);
             return "profile";
-        } else {
+        } else try {
             super.create(userTo);
             status.setComplete();
             return "redirect:/login?message=app.registered&username=" + userTo.getEmail();
+        } catch (DataIntegrityViolationException e) {
+            result.rejectValue("email", "error.user", "An account already exists for this email.");
+
+            return "profile";
         }
     }
 }
