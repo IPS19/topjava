@@ -68,17 +68,13 @@ class ProfileRestControllerTest extends AbstractControllerTest {
     @Test
     void registerNotValid() throws Exception {
         UserTo emptyName = new UserTo(null, "", "newemail@ya.ru", "newPassword", 1500);
-//        ErrorInfo errorInfo = new ErrorInfo()
-//        String jsonError = "{\"url\":\"http://localhost:8080/topjava/rest/admin/users\",\"type\":\"VALIDATION_ERROR\",\"detail\":\"[name] не должно быть пустым<br>[name] размер должен находиться в диапазоне от 2 до 128\"}";
-        ResultActions action = perform(MockMvcRequestBuilders.post(REST_URL)
+        perform(MockMvcRequestBuilders.post(REST_URL)
                 .contentType(MediaType.APPLICATION_JSON)
                 .content(JsonUtil.writeValue(emptyName)))
                 .andDo(print())
-                .andExpect(status().isUnprocessableEntity())
-                .andExpect(content().string(containsString("VALIDATION_ERROR")));
-//                .andExpect(content().string(jsonError));
-//                .andExpect(MockMvcResultMatchers)
-
+                .andExpectAll(status().isUnprocessableEntity(),
+                        content().string(containsString("\"url\":\"http://localhost/rest/profile\"")),
+                        content().string(containsString("VALIDATION_ERROR")));
     }
 
 
